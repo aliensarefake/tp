@@ -138,4 +138,157 @@ public class UniqueClassListTest {
         classList.add(class2);
         assertEquals(2, classList.asUnmodifiableObservableList().size());
     }
+
+    @Test
+    @DisplayName("setClasses replaces all classes successfully")
+    void setClasses_validList_success() {
+        classList.add(class1);
+
+        java.util.List<TuitionClass> newClasses = java.util.Arrays.asList(class2);
+        classList.setClasses(newClasses);
+
+        assertFalse(classList.contains(class1));
+        assertTrue(classList.contains(class2));
+        assertEquals(1, classList.size());
+    }
+
+    @Test
+    @DisplayName("setClasses with duplicates throws DuplicateClassException")
+    void setClasses_duplicateClasses_throws() {
+        java.util.List<TuitionClass> duplicateClasses = java.util.Arrays.asList(class1, class1);
+        assertThrows(DuplicateClassException.class, () -> classList.setClasses(duplicateClasses));
+    }
+
+    @Test
+    @DisplayName("clear removes all classes")
+    void clear_removesAllClasses() {
+        classList.add(class1);
+        classList.add(class2);
+        assertEquals(2, classList.size());
+
+        classList.clear();
+        assertEquals(0, classList.size());
+        assertFalse(classList.contains(class1));
+        assertFalse(classList.contains(class2));
+    }
+
+    @Test
+    @DisplayName("size returns correct count")
+    void size_returnsCorrectCount() {
+        assertEquals(0, classList.size());
+        classList.add(class1);
+        assertEquals(1, classList.size());
+        classList.add(class2);
+        assertEquals(2, classList.size());
+        classList.remove(class1);
+        assertEquals(1, classList.size());
+    }
+
+    @Test
+    @DisplayName("iterator method works correctly")
+    void iterator_iteratesOverClasses() {
+        classList.add(class1);
+        classList.add(class2);
+
+        java.util.Iterator<TuitionClass> iterator = classList.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(class1, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(class2, iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    @DisplayName("equals returns true for same object")
+    void equals_sameObject_returnsTrue() {
+        assertTrue(classList.equals(classList));
+    }
+
+    @Test
+    @DisplayName("equals returns false for null")
+    void equals_null_returnsFalse() {
+        assertFalse(classList.equals(null));
+    }
+
+    @Test
+    @DisplayName("equals returns false for different type")
+    void equals_differentType_returnsFalse() {
+        assertFalse(classList.equals("not a list"));
+    }
+
+    @Test
+    @DisplayName("equals returns true for same contents")
+    void equals_sameContents_returnsTrue() {
+        UniqueClassList otherList = new UniqueClassList();
+        classList.add(class1);
+        otherList.add(class1);
+
+        assertTrue(classList.equals(otherList));
+    }
+
+    @Test
+    @DisplayName("equals returns false for different contents")
+    void equals_differentContents_returnsFalse() {
+        UniqueClassList otherList = new UniqueClassList();
+        classList.add(class1);
+        otherList.add(class2);
+
+        assertFalse(classList.equals(otherList));
+    }
+
+    @Test
+    @DisplayName("hashCode is consistent")
+    void hashCode_isConsistent() {
+        classList.add(class1);
+        int hash1 = classList.hashCode();
+        int hash2 = classList.hashCode();
+        assertEquals(hash1, hash2);
+    }
+
+    @Test
+    @DisplayName("toString returns empty message for empty list")
+    void toString_emptyList_returnsEmptyMessage() {
+        String result = classList.toString();
+        assertTrue(result.contains("No classes available"));
+    }
+
+    @Test
+    @DisplayName("toString lists class names")
+    void toString_nonEmptyList_listsClasses() {
+        classList.add(class1);
+        classList.add(class2);
+
+        String result = classList.toString();
+        assertTrue(result.contains("CS2103T T12"));
+        assertTrue(result.contains("CS2103T T13"));
+    }
+
+    @Test
+    @DisplayName("setClass updates class successfully")
+    void setClass_validUpdate_success() {
+        classList.add(class1);
+        TuitionClass updatedClass = new TuitionClass(new ClassName("CS2103T T14"), tutor1);
+
+        classList.setClass(class1, updatedClass);
+
+        assertFalse(classList.contains(class1));
+        assertTrue(classList.contains(updatedClass));
+    }
+
+    @Test
+    @DisplayName("setClass throws ClassNotFoundException for non-existent class")
+    void setClass_nonExistentClass_throws() {
+        TuitionClass updatedClass = new TuitionClass(new ClassName("CS2103T T14"), tutor1);
+        assertThrows(ClassNotFoundException.class, () -> classList.setClass(class1, updatedClass));
+    }
+
+    @Test
+    @DisplayName("setClass throws DuplicateClassException for duplicate")
+    void setClass_duplicateClass_throws() {
+        classList.add(class1);
+        classList.add(class2);
+
+        TuitionClass duplicateClass = new TuitionClass(new ClassName("CS2103T T13"), tutor1);
+        assertThrows(DuplicateClassException.class, () -> classList.setClass(class1, duplicateClass));
+    }
 }
