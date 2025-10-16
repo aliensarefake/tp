@@ -65,4 +65,20 @@ public class ListChildrenCommandParserTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    public void parse_textWithoutPrefix_returnsListAllChildrenCommand() throws Exception {
+        ListChildrenCommand result = parser.parse("some random text");
+        ListChildrenCommand expected = new ListChildrenCommand();
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void parse_multipleWordsWithoutPrefix_returnsListAllChildrenCommand() throws Exception {
+        ListChildrenCommand result = parser.parse("John Doe");
+        ListChildrenCommand expected = new ListChildrenCommand();
+
+        assertEquals(expected, result);
+    }
 }
