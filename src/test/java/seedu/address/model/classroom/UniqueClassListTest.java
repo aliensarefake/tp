@@ -33,6 +33,7 @@ public class UniqueClassListTest {
     private Tutor tutor2;
     private TuitionClass class1;
     private TuitionClass class2;
+    private TuitionClass class3;
 
     @BeforeEach
     void setUp() {
@@ -57,6 +58,7 @@ public class UniqueClassListTest {
 
         class1 = new TuitionClass(new ClassName("CS2103T T12"), tutor1);
         class2 = new TuitionClass(new ClassName("CS2103T T13"), tutor2);
+        class3 = new TuitionClass(new ClassName("CS2103T T14"), tutor1);
     }
 
     @Test
@@ -140,22 +142,36 @@ public class UniqueClassListTest {
     }
 
     @Test
-    @DisplayName("setClasses replaces all classes successfully")
+    @DisplayName("setClasses replaces classes successfully")
     void setClasses_validList_success() {
         classList.add(class1);
 
-        java.util.List<TuitionClass> newClasses = java.util.Arrays.asList(class2);
+        java.util.List<TuitionClass> newClasses = java.util.Arrays.asList(class2, class3);
         classList.setClasses(newClasses);
 
         assertFalse(classList.contains(class1));
         assertTrue(classList.contains(class2));
-        assertEquals(1, classList.size());
+        assertTrue(classList.contains(class3));
+        assertEquals(2, classList.size());
+    }
+
+    @Test
+    @DisplayName("setClasses handles multiple unique classes")
+    void setClasses_multipleUniqueClasses_success() {
+        java.util.List<TuitionClass> newClasses = java.util.Arrays.asList(class1, class2, class3);
+        classList.setClasses(newClasses);
+
+        assertEquals(3, classList.size());
+        assertTrue(classList.contains(class1));
+        assertTrue(classList.contains(class2));
+        assertTrue(classList.contains(class3));
     }
 
     @Test
     @DisplayName("setClasses with duplicates throws DuplicateClassException")
     void setClasses_duplicateClasses_throws() {
-        java.util.List<TuitionClass> duplicateClasses = java.util.Arrays.asList(class1, class1);
+        java.util.List<TuitionClass> duplicateClasses = java.util.Arrays.asList(class1, class3,
+                new TuitionClass(new ClassName("CS2103T T14"), tutor1));
         assertThrows(DuplicateClassException.class, () -> classList.setClasses(duplicateClasses));
     }
 
@@ -164,8 +180,6 @@ public class UniqueClassListTest {
     void clear_removesAllClasses() {
         classList.add(class1);
         classList.add(class2);
-        assertEquals(2, classList.size());
-
         classList.clear();
         assertEquals(0, classList.size());
         assertFalse(classList.contains(class1));
@@ -264,26 +278,25 @@ public class UniqueClassListTest {
     }
 
     @Test
-    @DisplayName("setClass updates class successfully")
+    @DisplayName("setClass updates an existing class")
     void setClass_validUpdate_success() {
         classList.add(class1);
-        TuitionClass updatedClass = new TuitionClass(new ClassName("CS2103T T14"), tutor1);
+        TuitionClass updatedClass = new TuitionClass(new ClassName("CS2103T T15"), tutor1);
 
         classList.setClass(class1, updatedClass);
-
         assertFalse(classList.contains(class1));
         assertTrue(classList.contains(updatedClass));
     }
 
     @Test
-    @DisplayName("setClass throws ClassNotFoundException for non-existent class")
+    @DisplayName("setClass throws when class not found")
     void setClass_nonExistentClass_throws() {
-        TuitionClass updatedClass = new TuitionClass(new ClassName("CS2103T T14"), tutor1);
+        TuitionClass updatedClass = new TuitionClass(new ClassName("CS2103T T15"), tutor1);
         assertThrows(ClassNotFoundException.class, () -> classList.setClass(class1, updatedClass));
     }
 
     @Test
-    @DisplayName("setClass throws DuplicateClassException for duplicate")
+    @DisplayName("setClass throws when resulting class duplicates existing entry")
     void setClass_duplicateClass_throws() {
         classList.add(class1);
         classList.add(class2);
