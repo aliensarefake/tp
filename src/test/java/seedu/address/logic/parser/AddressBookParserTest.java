@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddClassCommand;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AttendCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteClassCommand;
 import seedu.address.logic.commands.DeleteCommand;
@@ -22,7 +23,6 @@ import seedu.address.logic.commands.EditClassCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.AttendCommand;
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
@@ -142,7 +142,8 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_attend() throws Exception {
-        assertTrue(parser.parseCommand(AttendCommand.COMMAND_WORD + " n/Alice session/1 status/PRESENT") instanceof AttendCommand);
+        String commandString = AttendCommand.COMMAND_WORD + " n/Alice session/1 status/PRESENT";
+        assertTrue(parser.parseCommand(commandString) instanceof AttendCommand);
     }
 
     @Test
