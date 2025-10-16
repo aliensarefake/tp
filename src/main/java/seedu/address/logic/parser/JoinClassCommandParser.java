@@ -24,16 +24,10 @@ public class JoinClassCommandParser implements Parser<JoinClassCommand> {
      */
     public JoinClassCommand parse(String args) throws ParseException {
         String trimmed = args.trim();
-        ArgumentMultimap map = ArgumentTokenizer.tokenize(trimmed, PREFIX_CLASS, PREFIX_NAME);
+        ArgumentMultimap map = ArgumentTokenizer.tokenize(" " + trimmed, PREFIX_CLASS, PREFIX_NAME);
 
         if (!arePrefixesPresent(map, PREFIX_CLASS, PREFIX_NAME) || !map.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddClassCommand.MESSAGE_USAGE));
-        }
-
-        // Only parse tutor name if present
-        if (!map.getValue(PREFIX_CLASS).isPresent() || !map.getValue(PREFIX_NAME).isPresent()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    JoinClassCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, JoinClassCommand.MESSAGE_USAGE));
         }
 
         return new JoinClassCommand(map.getValue(PREFIX_NAME).get(), map.getValue(PREFIX_CLASS).get());

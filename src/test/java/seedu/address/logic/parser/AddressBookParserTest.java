@@ -24,6 +24,7 @@ import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.JoinClassCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
@@ -45,7 +46,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_addClass() throws Exception {
-        AddClassCommand command = (AddClassCommand) parser.parseCommand("addclass cn/Sec2-Math-A");
+        AddClassCommand command = (AddClassCommand) parser.parseCommand("addclass c/Sec2-Math-A");
         assertEquals(new AddClassCommand("Sec2-Math-A"), command);
     }
 
@@ -107,6 +108,12 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_join() throws Exception {
+        JoinClassCommand command = (JoinClassCommand) parser.parseCommand("join n/Alice Tan c/CS2103T");
+        assertEquals(new JoinClassCommand("Alice Tan", "CS2103T"), command);
     }
 
     @Test
